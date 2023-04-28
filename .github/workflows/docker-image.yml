@@ -17,14 +17,14 @@ jobs:
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
       
-  steps:
-      - name: Checkout repo
-        uses: actions/checkout@v2
+   
+    - name: Checkout repo
+      uses: actions/checkout@v2
 
-      - name: Run Bridgecrew 
-        id: Bridgecrew
-        uses: bridgecrewio/bridgecrew-action@master 
-        env:
-          PRISMA_API_URL: https://api.prismacloud.io
-        with:
-          api-key: ${{ secrets.BC_API_KEY }}
+    - name: Run Bridgecrew 
+      id: Bridgecrew
+      uses: bridgecrewio/bridgecrew-action@master 
+      env:
+        PRISMA_API_URL: https://api.prismacloud.io
+      with:
+        api-key: ${{ secrets.BC_API_KEY }}
