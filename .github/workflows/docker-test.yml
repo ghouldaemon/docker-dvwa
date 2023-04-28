@@ -1,0 +1,29 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: docker build . --file docker-dvwa/docker/Dockerfile --tag dvwa:$(date +%s)
+
+    - name: Checkout repo
+    - uses: actions/checkout@v2
+
+    - name: Run Bridgecrew 
+    - id: Bridgecrew
+    - uses: bridgecrewio/bridgecrew-action@master 
+    - env:
+        PRISMA_API_URL: https://api.prismacloud.io
+    - with:
+        api-key: ${{ secrets.BC_API_KEY }}
