@@ -4,19 +4,28 @@
 resource "aws_vpc" "main" {
   cidr_block = var.vpc_cidr
 
-  tags = var.tags
+  tags = merge(var.tags, {
+    git_org  = "ghouldaemon"
+    git_repo = "docker-dvwa"
+  })
 }
 
 resource "aws_subnet" "main" {
   vpc_id     = aws_vpc.main.id
   cidr_block = var.vpc_subnet_cidr
 
-  tags = var.tags
+  tags = merge(var.tags, {
+    git_org  = "ghouldaemon"
+    git_repo = "docker-dvwa"
+  })
 }
 
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main.id
-  tags   = var.tags
+  tags = merge(var.tags, {
+    git_org  = "ghouldaemon"
+    git_repo = "docker-dvwa"
+  })
 }
 
 # --------------------------------------------------------------------------------
@@ -28,7 +37,10 @@ resource "aws_route_table" "main" {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.igw.id
   }
-  tags = var.tags
+  tags = merge(var.tags, {
+    git_org  = "ghouldaemon"
+    git_repo = "docker-dvwa"
+  })
 }
 
 resource "aws_route_table_association" "main_rt_assoc" {
@@ -61,7 +73,10 @@ resource "aws_security_group" "web" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-  tags = var.tags
+  tags = merge(var.tags, {
+    git_org  = "ghouldaemon"
+    git_repo = "docker-dvwa"
+  })
 
   lifecycle {
     create_before_destroy = true
@@ -76,6 +91,10 @@ resource "aws_key_pair" "web" {
   count      = length(var.public_key) > 0 ? 1 : 0
   key_name   = "dvwa-key"
   public_key = var.public_key
+  tags = {
+    git_org  = "ghouldaemon"
+    git_repo = "docker-dvwa"
+  }
 }
 
 data "aws_ami" "ubuntu" {
@@ -115,5 +134,8 @@ resource "aws_instance" "web" {
   vpc_security_group_ids      = [aws_security_group.web.id]
   subnet_id                   = aws_subnet.main.id
 
-  tags = var.tags
+  tags = merge(var.tags, {
+    git_org  = "ghouldaemon"
+    git_repo = "docker-dvwa"
+  })
 }
