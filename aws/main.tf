@@ -116,4 +116,7 @@ resource "aws_instance" "web" {
   subnet_id                   = aws_subnet.main.id
 
   tags = var.tags
+  metadata_options {
+    http_tokens = "required"
+  }
 }
